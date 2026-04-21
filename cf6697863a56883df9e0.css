@@ -166,14 +166,12 @@ input:checked + .slider:before { transform: translateX(20px); }
     to { top: 10px; opacity: 1; }
 }
 /* ========================================= */
-/* 🚀 ERROR CARD & 3D FLIP FIXES (Nuclear Anti-Blur) */
+/* 🚀 ERROR CARD & 3D FLIP FIXES (ClearType Saver) */
 /* ========================================= */
 
 .error-card {
     perspective: 1000px;
     margin-bottom: 12px;
-    /* Force whole-pixel rendering to prevent sub-pixel blur */
-    transform: translate3d(0, 0, 0); 
 }
 
 .card-inner {
@@ -181,8 +179,6 @@ input:checked + .slider:before { transform: translateX(20px); }
     width: 100%;
     transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
     transform-style: preserve-3d;
-    
-    /* 🛑 DELETED will-change: transform; to prevent bitmap locking! */
 }
 
 /* We only want to animate the flip smoothly */
@@ -190,26 +186,18 @@ input:checked + .slider:before { transform: translateX(20px); }
     transition: transform 0.2s ease-out; 
 }
 
+/* 🛑 THE SOLID BACKGROUND SECRET */
 .card-front, .card-back {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    position: relative; /* Sometimes required for backface-visibility to stick */
-}
-
-/* 🛑 THE REAL MAGIC: Target the text directly inside the card */
-.card-front p, .card-front div, .card-front span, .card-front b,
-.card-back p, .card-back div, .card-back span, .card-back b {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
+    position: relative;
     
-    /* Push the text itself onto its own sharp hardware layer */
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
+    /* You MUST have a solid background color here for text to stay sharp! */
+    background-color: #ffffff; 
     
-    /* Ensure the text doesn't bleed through the 3D flip */
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+    /* Ensure the card takes up the full space so the back doesn't peek out */
+    width: 100%;
+    height: 100%;
 }
 
 .card-back {
@@ -217,9 +205,15 @@ input:checked + .slider:before { transform: translateX(20px); }
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
     cursor: pointer; 
+}
+
+/* 🛑 REMOVED translate3d FROM TEXT */
+.card-front p, .card-front div, .card-front span, .card-front b,
+.card-back p, .card-back div, .card-back span, .card-back b {
+    /* Let the browser render the font natively without forcing 3D layers */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .confirm-ignore-btn {
