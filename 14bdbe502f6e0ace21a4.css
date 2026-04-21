@@ -166,56 +166,62 @@ input:checked + .slider:before { transform: translateX(20px); }
     to { top: 10px; opacity: 1; }
 }
 /* ========================================= */
-/* 🚀 ERROR CARD & 3D FLIP FIXES (Anti-Blur) */
+/* 🚀 ERROR CARD & 3D FLIP FIXES (Nuclear Anti-Blur) */
 /* ========================================= */
 
 .error-card {
-    /* Set up 3D perspective so the flip doesn't look flat */
     perspective: 1000px;
     margin-bottom: 12px;
+    /* Force whole-pixel rendering to prevent sub-pixel blur */
+    transform: translate3d(0, 0, 0); 
 }
 
 .card-inner {
     position: relative;
     width: 100%;
-    /* This defines how long the flip takes. 0.4s feels snappy! */
     transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
     transform-style: preserve-3d;
     
-    /* 🛑 The Magic Anti-Blur Rule: Forces native resolution rendering */
-    transform: translateZ(0);
-    will-change: transform;
+    /* 🛑 DELETED will-change: transform; to prevent bitmap locking! */
 }
 
-/* We only want to animate the flip smoothly, not the return if they click the back */
+/* We only want to animate the flip smoothly */
 .error-card:not(.is-flipped) .card-inner {
     transition: transform 0.2s ease-out; 
 }
 
 .card-front, .card-back {
-    /* Ensure the back side is truly hidden when facing away */
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    
-    /* Keep text razor sharp! */
+    position: relative; /* Sometimes required for backface-visibility to stick */
+}
+
+/* 🛑 THE REAL MAGIC: Target the text directly inside the card */
+.card-front p, .card-front div, .card-front span, .card-front b,
+.card-back p, .card-back div, .card-back span, .card-back b {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    
+    /* Push the text itself onto its own sharp hardware layer */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    
+    /* Ensure the text doesn't bleed through the 3D flip */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .card-back {
-    /* The back starts flipped 180 degrees away from the user */
     transform: rotateY(180deg);
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Optional: Make it look clickable to go back */
     cursor: pointer; 
 }
 
-/* Keep the confirm button on top of the card's pointer-events */
 .confirm-ignore-btn {
     position: relative;
     z-index: 10;
