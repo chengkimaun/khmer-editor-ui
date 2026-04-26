@@ -1,0 +1,568 @@
+/* 
+ * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+ * See LICENSE in the project root for license information.
+ */
+
+ html,
+ /* General App Styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Khmer OS Battambang';
+    margin: 0;
+    padding: 0;
+    background-color: #f3f2f1; /* Light gray background */
+    color: #323130;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Header */
+.app-header {
+    background: #ffffff;
+    padding: 15px 15px;
+    border-bottom: 1px solid #e1dfdd;
+    text-align: center;
+    /* If you have overflow: hidden, delete it or change it to visible! */
+    overflow: visible !important;
+}
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.app-logo {
+    width: 32px;
+    height: 32px;
+}
+.app-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    color: #107c10; /* Microsoft Word Green */
+}
+.app-description {
+    font-size: 12px;
+    color: #605e5c;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Main Body */
+.app-main {
+    padding: 15px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+/* Buttons */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    /* ADD THIS LINE */
+    font-family: 'Khmer OS Battambang', 'Segoe UI', sans-serif;
+}
+#run:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Also apply it to the input/toggle area just in case */
+.toggle-title, .toggle-subtitle, .app-description {
+    font-family: 'Khmer OS Battambang', 'Segoe UI', sans-serif;
+}
+.primary-btn {
+    background-color: #107c10;
+    color: white;
+}
+.primary-btn:hover { background-color: #0b5a0b; }
+
+.secondary-btn {
+    background-color: #ffffff;
+    color: #107c10;
+    border: 1px solid #107c10;
+}
+.secondary-btn:hover { background-color: #f3f2f1; }
+
+/* Smart Scan Toggle Switch */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+.toggle-text {
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+}
+.toggle-title { font-weight: 600; font-size: 14px; }
+.toggle-subtitle { font-size: 11px; color: #888; }
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px; width: 16px;
+    left: 2px; bottom: 2px;
+    background-color: white;
+    transition: .4s;
+}
+input:checked + .slider { background-color: #107c10; }
+input:checked + .slider:before { transform: translateX(20px); }
+.slider.round { border-radius: 34px; }
+.slider.round:before { border-radius: 50%; }
+
+/* Footer */
+.app-footer {
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+    background: #ffffff;
+    border-top: 1px solid #e1dfdd;
+}
+.app-footer a { color: #0078d4; text-decoration: none; font-weight: bold; }
+.app-footer a:hover { text-decoration: underline; }
+
+/* Microphone Recording Animation */
+.recording {
+    background-color: #fff8f6 !important;
+    color: #d83b01 !important;
+    border-color: #d83b01 !important;
+    animation: pulse-red 1.5s infinite;
+}
+
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(216, 59, 1, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(216, 59, 1, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(216, 59, 1, 0); }
+}
+@keyframes slideDown {
+    from { top: -50px; opacity: 0; }
+    to { top: 10px; opacity: 1; }
+}
+/* 1. Main App Backgrounds */
+body.dark-mode, 
+body.dark-mode .app-main, 
+body.dark-mode .ms-Fabric {
+    background-color: #565555 !important; /* background 
+    /* 🚀 Fixed: Changed from dark grey back to light grey so text is visible */
+    color: #e0e0e0 !important; 
+}
+
+/* 2. Header, Footer, and Highlight Bar */
+body.dark-mode .app-header, 
+body.dark-mode .app-footer,
+body.dark-mode #highlight-controls {
+    background-color: #565555 !important; /* header & footer backcolor */
+    border-color: #333 !important;
+}
+
+/* 3. Text Colors (Titles, Labels, Descriptions) */
+body.dark-mode h1, 
+body.dark-mode h3, 
+body.dark-mode h4, 
+body.dark-mode h5,
+body.dark-mode p, 
+body.dark-mode label, 
+body.dark-mode span:not(.slider):not(#tier-badge) {
+    color: #d4d4d4 !important;
+}
+
+/* 4. The Settings Form */
+body.dark-mode #contribution-form {
+    background-color: #464444 !important;
+    border-color: #107c10 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+}
+
+/* 🚀 FIX 3: Make the Smart Scanning container a little lighter */
+body.dark-mode .toggle-container {
+    background-color: #464444 !important; 
+    border-color: #444 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+}
+
+/* 5. Inputs, Selects, and Textareas */
+body.dark-mode input[type="text"], 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background-color: #303030 !important;
+    color: #ffffff !important;
+    border-color: #555 !important;
+}
+
+/* 6. JSON Cheat Sheet Box Fixes - PROTECTING COLORS */
+body.dark-mode #json-input-container > div {
+    background-color: #252526 !important;
+    border-color: #444 !important;
+}
+
+/* 🚀 FIX: Prevent the cheat sheet types from turning white */
+body.dark-mode #json-input-container span[style*="color"],
+body.dark-mode #json-input-container b {
+    color: inherit !important; 
+    opacity: 1 !important;
+    filter: brightness(1.5); /* Makes the red/orange pop against dark */
+}
+/* 🎨 ERROR TYPE COLORS (Immune to Edge Auto-Dark Mode) */
+.err-spelling { 
+    color: #d83b01 !important; 
+    -webkit-text-fill-color: #d83b01 !important; 
+    font-weight: bold; 
+}
+.err-extra { 
+    color: #00bcf2 !important; 
+    -webkit-text-fill-color: #00bcf2 !important; 
+    font-weight: bold; 
+}
+.err-phrase { 
+    color: #ffb900 !important; 
+    -webkit-text-fill-color: #ffb900 !important; 
+    font-weight: bold; 
+}
+.err-punct { 
+    color: #8e11b7 !important; 
+    -webkit-text-fill-color: #8e11b7 !important; 
+    font-weight: bold; 
+}
+.err-num { 
+    color: #008272 !important; 
+    -webkit-text-fill-color: #008272 !important; 
+    font-weight: bold; 
+}
+.err-phrase-use { 
+    color: #0eab16 !important; 
+    -webkit-text-fill-color: #0eab16 !important; 
+    font-weight: bold; 
+}
+
+/* 7. The Changelog Box */
+body.dark-mode #changelog-box {
+    background-color: #464444 !important;
+    border-color: #464444 !important;
+}
+body.dark-mode #changelog-box h3 {
+    color: #ffb900 !important; 
+    border-bottom-color: #464444 !important;
+}
+/* 🚀 FIX 4: Ensure ALL text inside the Changelog is white */
+body.dark-mode #changelog-box,
+body.dark-mode #changelog-box * {
+    color: #e0e0e0 !important;
+}
+
+/* 8. Fix the 3-Dots Menu & Moon Icon Colors */
+body.dark-mode #btn-open-manual {
+    color: #d4d4d4 !important;
+}
+
+/* 🚀 FIX: GENERATED CARDS DARK MODE STYLE */
+
+/* 1. BRUTE FORCE: Strip white backgrounds from ALL inner divs */
+body.dark-mode #error-list div {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* 1b. Re-apply the dim dark grey ONLY to the main card container */
+body.dark-mode #error-list > div {
+    background: #464444 !important;
+    background-color: #464444 !important;
+    border-color: #444444 !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4) !important;
+}
+
+/* 🚀 FIX 1: Force all card/summary text to be white/light grey */
+body.dark-mode #error-list > div,
+body.dark-mode #error-list p,
+body.dark-mode #error-list div {
+    color: #e0e0e0 !important;
+}
+
+/* 3. Make bold text pop with pure white */
+body.dark-mode #error-list b,
+body.dark-mode #error-list strong {
+    color: #ffffff !important;
+}
+
+/* 🚀 FIX 2: Dim the Local/AI Pill Tags */
+body.dark-mode #error-list span[style*="border"] {
+    background-color: #3a3a3a !important; 
+    border-color: #555555 !important;
+    color: #b0bec5 !important; 
+}
+
+/* 🚀 DIM THE TWO HIGHLIGHT BUTTONS */
+body.dark-mode #btn-show-color {
+    background-color: #1a3320 !important;
+    border-color: #107c10 !important;
+    color: #81c784 !important;
+}
+
+body.dark-mode #btn-hide-color {
+    background-color: #333333 !important;
+    border-color: #555555 !important;
+    color: #d4d4d4 !important;
+}
+
+/* 🚀 FIX INFO PANEL TEXT & GLOW */
+body.dark-mode #error-list p,
+body.dark-mode #error-list span {
+    color: #dfdddd !important;
+    text-shadow: none !important; 
+}
+
+/* 🚀 ULTIMATE INFO PANEL TEXT BRIGHTNESS FIX (REFINED) */
+body.dark-mode #error-list div,
+body.dark-mode #error-list p,
+body.dark-mode #error-list span:not([style*="color"]), 
+body.dark-mode #error-list center,
+body.dark-mode #error-list small,
+body.dark-mode #error-list font {
+    color: #d7d6d6 !important; 
+    opacity: 1 !important;
+    text-shadow: none !important; 
+}
+
+/* Allow the colors inside the info sheet specifically to pop */
+body.dark-mode #json-input-container [style*="color"] {
+    filter: brightness(1.2); 
+}
+
+/* 🚀 SASSY DARK MODE SCROLLBAR */
+body.dark-mode ::-webkit-scrollbar {
+    width: 14px !important;
+}
+body.dark-mode ::-webkit-scrollbar-track {
+    background-color: #373737 !important;
+    border-left: 1px solid #333333 !important;
+}
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background-color: #555555 !important;
+    border-radius: 10px !important;
+    border: 3px solid #373737 !important;
+}
+body.dark-mode ::-webkit-scrollbar-button {
+    display: none !important;
+}
+body.dark-mode ::-webkit-scrollbar-corner {
+    background-color: #565555 !important;
+}
+/* 🚀 Nudge the sun/moon icons down slightly for better alignment with Khmer text */
+#theme-toggle {
+    padding-top: 8px !important; /* Adjust this number (2px, 3px, or 4px) to hit the sweet spot */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* 🌑 DARK MODE INPUTS & SELECTS */
+body.dark-mode #contribution-form input[type="text"], 
+body.dark-mode #contribution-form select, 
+body.dark-mode #contribution-form textarea {
+    background-color: #2d2d2d !important; /* Dim grey background */
+    color: #ffffff !important;           /* Pure white text for readability */
+    border: 1px solid #444444 !important; /* Subtle border */
+    outline: none !important;
+}
+
+/* 🚀 Focus Effect: Make it glow slightly when clicked */
+body.dark-mode #contribution-form input:focus, 
+body.dark-mode #contribution-form select:focus, 
+body.dark-mode #contribution-form textarea:focus {
+    border-color: #107c10 !important; /* Office Green glow */
+    background-color: #333333 !important;
+}
+
+/* Fix for the Placeholder text (the ghost text) */
+body.dark-mode #contribution-form input::placeholder,
+body.dark-mode #contribution-form textarea::placeholder {
+    color: #888888 !important;
+    opacity: 1;
+}
+
+/* Fix for the Select dropdown arrow in some browsers */
+body.dark-mode #contribution-form select {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23ffffff'%3E%3Cpath d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    appearance: none !important;
+}
+
+/* 🌑 DARK MODE: Lock the color when the toggle is hovered */
+body.dark-mode .app-header:not(:has(#theme-toggle:hover)):hover {
+    background-color: #504e4e !important; /* Subtle highlight for header only */
+}
+/* Make the header feel interactive */
+.app-header {
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+/* ☀️ LIGHT MODE: Only hover if NOT touching the toggle */
+.app-header:not(:has(#theme-toggle:hover)):hover {
+    background-color: #f0f0f0 !important; /* Or your preferred light hover color */
+    filter: brightness(1.05);
+}
+
+.app-header:active {
+    filter: brightness(0.9); /* Subtle "pressed" look */
+}
+/* 🚀 Prevent the header from "flashing" when clicking the theme icon */
+#theme-toggle {
+    position: relative;
+    z-index: 10; /* Keep it above the header's hit area */
+}
+
+/* 🔒 THE PROTECTOR: If the toggle IS hovered, force header to stay original color */
+.app-header:has(#theme-toggle:hover) {
+    background-color: inherit !important; 
+    filter: none !important;
+    cursor: default; /* So the header doesn't look clickable while on the button */
+}
+
+/* Make footer match header interactivity */
+.app-footer {
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.app-footer:hover {
+    background-color: #f0f0f0 !important; /* Or your preferred light hover color */
+    filter: brightness(1.05);
+}
+
+
+/* 🌑 Dark Mode specific footer hover tweak */
+body.dark-mode .app-footer:hover {
+    background-color: #504e4e !important; /* Slightly lighter than #464444 */
+}
+/* ☀️ LIGHT MODE (Default) */
+.api-label {
+    color: #0078d4; /* Your custom blue! */
+}
+
+.api-select {
+    background: #f4f9ff; /* Light blue background */
+    color: #003366;      /* Dark blue text */
+}
+
+/* 🌑 DARK MODE */
+body.dark-mode .api-label {
+    color: #ffffff !important; /* 🚀 The !important forces it to turn white */
+}
+
+body.dark-mode .api-select {
+    background: #333333 !important; 
+    color: #ffffff !important;      
+    border-color: #555555 !important; 
+}
+/* 🌑 INACTIVE State (Dim and quiet) */
+body.dark-mode #btn-hide-color,
+body.dark-mode #btn-show-color {
+    background-color: #333333 !important; 
+    color: #999999 !important; 
+    -webkit-text-fill-color: #999999 !important;
+    border: 1px solid #444444 !important;
+    transition: all 0.2s ease !important;
+}
+
+/* 🟢 ACTIVE State (Bright text, lighter background, crisp border) */
+body.dark-mode #btn-hide-color.active-toggle,
+body.dark-mode #btn-show-color.active-toggle {
+    background-color: #555555 !important; 
+    color: #ffffff !important; 
+    -webkit-text-fill-color: #ffffff !important;
+    border: 1px solid #aaaaaa !important; 
+    font-weight: bold !important;
+    pointer-events: none !important; /* Prevents double-clicking the already active button */
+}
+/* 1. LOCK THE PARENT */
+[data-tooltip] {
+    position: relative !important; /* 🚀 This stops the 120% from measuring the whole page */
+    cursor: pointer;
+}
+
+/* 2. THE TOOLTIP ENGINE */
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+/* ⬇️ HOW TO MOVE IT DOWN */
+    top: 100%;        /* Starts at the exact bottom of the moon icon */
+    margin-top: 12px; /* Pushes it further down. Increase this to go lower! */
+    
+    /* ⬅️ HOW TO MOVE IT LEFT */
+    right: 50%;       /* Pushes the tooltip to the left of the button */                  
+    background-color: #333333;   
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+    z-index: 9999;
+    
+    /* 🚀 Add this to stop it from blocking clicks or creating scroll areas */
+    pointer-events: none; 
+    
+    font-family: 'Khmer OS Battambang', sans-serif !important;
+    font-size: 11px;
+    font-weight: normal;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* Show tooltip on mouse over */
+[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 🌑 DARK MODE TWEAK */
+body.dark-mode [data-tooltip]::after {
+    background-color: #2b5cd1 !important;
+    border: 1px solid #ffffff33;
+}
+/* 1. Force the tooltip itself to the front */
+[data-tooltip]::before,
+[data-tooltip]::after,
+.your-tooltip-class {  /* Add whatever class your actual tooltip box uses here */
+    z-index: 999999 !important; 
+}
+
+/* 2. THE SECRET WEAPON: Elevate the parent element when hovered */
+[data-tooltip]:hover,
+.app-header:hover {
+    z-index: 99999 !important; 
+    position: relative; /* z-index ONLY works if position is relative, absolute, or fixed */
+}
