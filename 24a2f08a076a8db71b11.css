@@ -1,0 +1,622 @@
+/* 
+ * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+ * See LICENSE in the project root for license information.
+ */
+
+/* ========================================================
+   🌟 CORE APP STYLING (GLOBAL RESETS)
+   ======================================================== */
+/* 1. Stop the Horizontal Scrollbar Spillage! */
+*, *::before, *::after {
+    box-sizing: border-box !important;
+}
+
+/* 2. Stop the Double Vertical Scrollbar! */
+html,
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Khmer OS Battambang';
+    margin: 0;
+    padding: 0;
+    background-color: #f3f2f1;
+    color: #323130;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden !important; /* 👈 THIS kills the outer scrollbar! */
+}
+
+.app-main {
+    padding: 15px;
+    flex-grow: 1;
+    overflow-y: auto; /* Only the inside of the app is allowed to scroll */
+    overflow-x: hidden; /* Strictly forbid horizontal scrolling */
+}
+
+/* 🚀 THE SMART BUFFER (CSS QUANTITY QUERY) */
+/* This adds the 80px margin to the last card ONLY if there are 4 or fewer cards in total! */
+.error-card:last-child:nth-child(-n+3) {
+    margin-bottom: 100px !important; 
+}
+
+/* --- Header & Footer --- */
+.app-header {
+    background: #ffffff;
+    padding: 15px;
+    border-bottom: 1px solid #e1dfdd;
+    text-align: center;
+    overflow: visible !important; /* Required for tooltips to escape */
+    cursor: pointer; /* Keeps the clicky finger icon! */
+}
+
+/* Light mode hover for Header & Footer */
+.app-header:not(:has(#theme-toggle:hover)):hover,
+.app-footer:hover {
+    background-color: #f0f0f0 !important;
+    filter: brightness(1.05);
+}
+
+.app-header:active {
+    filter: brightness(0.9);
+}
+
+/* Protect the header from flashing when clicking the theme toggle */
+.app-header:has(#theme-toggle:hover) {
+    background-color: inherit !important; 
+    filter: none !important;
+    cursor: default; 
+}
+
+.app-footer {
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+    background: #ffffff;
+    border-top: 1px solid #e1dfdd;
+    cursor: pointer; /* Keeps the clicky finger icon! */
+}
+.app-footer a { color: #0078d4; text-decoration: none; font-weight: bold; }
+.app-footer a:hover { text-decoration: underline; }
+.app-footer a { color: #0078d4; text-decoration: none; font-weight: bold; }
+.app-footer a:hover { text-decoration: underline; }
+
+/* --- Logo & Titles --- */
+.logo-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px; }
+.app-logo { width: 32px; height: 32px; }
+.app-title { font-size: 20px; font-weight: 600; margin: 0; color: #107c10; }
+.app-description { font-size: 12px; color: #605e5c; margin: 0; line-height: 1.4; font-family: 'Khmer OS Battambang', 'Segoe UI', sans-serif; }
+
+/* --- Theme Toggle Icon Alignment --- */
+#theme-toggle {
+    padding-top: 8px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+}
+
+
+/* ========================================================
+   🔘 BUTTONS, TOGGLES, & UI ELEMENTS
+   ======================================================== */
+.button-group { display: flex; gap: 10px; margin-bottom: 20px; }
+
+button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Khmer OS Battambang', 'Segoe UI', sans-serif;
+}
+#run:focus { outline: none !important; box-shadow: none !important; }
+
+.primary-btn { background-color: #107c10; color: white; }
+.primary-btn:hover { background-color: #0b5a0b; }
+
+.secondary-btn { background-color: #ffffff; color: #107c10; border: 1px solid #107c10; }
+.secondary-btn:hover { background-color: #f3f2f1; }
+
+/* --- Smart Scan Toggle Switch --- */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+.toggle-text { margin-left: 12px; display: flex; flex-direction: column; }
+.toggle-title { font-weight: 600; font-size: 14px; font-family: 'Khmer OS Battambang', 'Segoe UI', sans-serif;}
+.toggle-subtitle { font-size: 11px; color: #888; font-family: 'Khmer OS Battambang', 'Segoe UI', sans-serif;}
+
+.switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; }
+.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; }
+input:checked + .slider { background-color: #107c10; }
+input:checked + .slider:before { transform: translateX(20px); }
+.slider.round { border-radius: 34px; }
+.slider.round:before { border-radius: 50%; }
+
+/* --- Specific Text Coloring --- */
+.api-label { color: #0078d4; }
+.api-select { background: #f4f9ff; color: #003366; }
+
+/* --- Animations --- */
+.recording {
+    background-color: #fff8f6 !important;
+    color: #d83b01 !important;
+    border-color: #d83b01 !important;
+    animation: pulse-red 1.5s infinite;
+}
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(216, 59, 1, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(216, 59, 1, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(216, 59, 1, 0); }
+}
+@keyframes slideDown {
+    from { top: -50px; opacity: 0; }
+    to { top: 10px; opacity: 1; }
+}
+
+/* ========================================================
+   💬 UNIFIED TOOLTIP ENGINE (MAX ELEVATION)
+   ======================================================== */
+[data-tooltip] {
+    position: relative !important; 
+    cursor: pointer;
+}
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 100%;        
+    margin-top: 12px; 
+    left: 50%; /* Center it mathematically */
+    transform: translateX(-50%); /* Perfect centering */
+    background-color: #333333;   
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+    pointer-events: none; 
+    font-family: 'Khmer OS Battambang', sans-serif !important;
+    font-size: 11px;
+    font-weight: normal;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    
+    /* 🚀 The absolute maximum z-index a browser allows! */
+    z-index: 2147483647 !important; 
+}
+
+/* Force tooltip to show ONLY on hover or while physically holding the click */
+[data-tooltip]:hover::after,
+[data-tooltip]:active::after { 
+    opacity: 1; 
+    visibility: visible; 
+}
+
+/* Elevate the parent button so it escapes the sticky bar jail */
+[data-tooltip]:hover, 
+[data-tooltip]:active,
+.app-header:hover {
+    z-index: 2147483646 !important; 
+}
+/* 🛑 FIX 1: Hide tooltips on the big buttons (they already have text!) */
+.dynamic-sticky-bar:not(.is-scrolled) [data-tooltip]::after {
+    display: none !important;
+}
+
+/* 🛑 FIX 2: Kill the "Stuck Hover" browser bug! 
+   Instantly hides the tooltip the moment a button becomes disabled */
+[data-tooltip]:disabled::after,
+button:disabled[data-tooltip]::after {
+    display: none !important;
+}
+
+/* ========================================================
+   🧠 SMART TOOLTIP POSITIONING (ANTI-CLIPPING)
+   ======================================================== */
+/* 1. Far-Right Buttons: Anchor right, expand left! */
+#sticky-home-btn[data-tooltip]::after,
+#sticky-menu-btn[data-tooltip]::after,
+#btn-open-manual[data-tooltip]::after,
+#theme-toggle[data-tooltip]::after {
+    left: auto !important; 
+    right: 0 !important; 
+    transform: none !important; 
+}
+
+/* 2. Far-Left Buttons: Anchor left, expand right! */
+#sticky-run-btn[data-tooltip]::after {
+    left: 0 !important;
+    transform: none !important;
+}
+
+/* 3. NO MORE CROWDED TEXT: Force a clean, single-line tooltip! */
+[data-tooltip]::after {
+    white-space: nowrap !important; 
+    max-width: none !important; 
+}
+/* ========================================================
+   🎨 HARDCODED ERROR TYPE COLORS (Both Themes)
+   ======================================================== */
+.err-spelling { color: #d83b01 !important; -webkit-text-fill-color: #d83b01 !important; font-weight: bold; }
+.err-extra { color: #00bcf2 !important; -webkit-text-fill-color: #00bcf2 !important; font-weight: bold; }
+.err-phrase { color: #ffb900 !important; -webkit-text-fill-color: #ffb900 !important; font-weight: bold; }
+.err-punct { color: #8e11b7 !important; -webkit-text-fill-color: #8e11b7 !important; font-weight: bold; }
+.err-num { color: #008272 !important; -webkit-text-fill-color: #008272 !important; font-weight: bold; }
+.err-phrase-use { color: #0eab16 !important; -webkit-text-fill-color: #0eab16 !important; font-weight: bold; }
+
+
+/* ========================================================
+   🌑 DARK MODE CORE (THEME ENGINE)
+   ======================================================== */
+body.dark-mode, 
+body.dark-mode .app-main, 
+body.dark-mode .ms-Fabric {
+    background-color: #565555 !important;
+    color: #e0e0e0 !important; 
+}
+
+/* Layout Elements */
+body.dark-mode .app-header, 
+body.dark-mode .app-footer,
+body.dark-mode #highlight-controls {
+    background-color: #565555 !important;
+    border-color: #333 !important;
+}
+body.dark-mode .app-footer:hover { background-color: #504e4e !important; }
+body.dark-mode .app-header:not(:has(#theme-toggle:hover)):hover { background-color: #504e4e !important; }
+
+/* Global Text Brightness */
+body.dark-mode h1, body.dark-mode h3, body.dark-mode h4, body.dark-mode h5,
+body.dark-mode p, body.dark-mode label, 
+body.dark-mode span:not(.slider):not(#tier-badge) {
+    color: #d4d4d4 !important;
+}
+
+/* Tooltip Theme (Restoring your favorite blue & fixing the dark text bug!) */
+body.dark-mode [data-tooltip]::after {
+    background-color: #2b5cd1 !important; /* The blue backcolor you love */
+    border: 1px solid #ffffff33 !important;
+    color: #ffffff !important; /* Force pure white text */
+    
+    /* 🛑 THE BUG FIX: Stop the tooltip from inheriting the button's gray text fill! */
+    -webkit-text-fill-color: #ffffff !important; 
+    
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6) !important;
+}
+
+
+/* ========================================================
+   🌑 DARK MODE COMPONENTS
+   ======================================================== */
+
+/* --- 1. Bulletproof Inputs & Selects --- */
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background-color: #2d2d2d !important; 
+    color: #ffffff !important;           
+    border: 1px solid #444444 !important; 
+    outline: none !important;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+body.dark-mode input:focus, body.dark-mode select:focus, body.dark-mode textarea:focus {
+    border-color: #107c10 !important; 
+    background-color: #333333 !important;
+}
+body.dark-mode input::placeholder, body.dark-mode textarea::placeholder {
+    color: #888888 !important; opacity: 1;
+}
+/* Select dropdown arrow fix */
+body.dark-mode select {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23ffffff'%3E%3Cpath d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important; background-position: right 10px center !important; appearance: none !important;
+}
+/* Autofill Armor */
+body.dark-mode input:-webkit-autofill, body.dark-mode input:-webkit-autofill:hover, 
+body.dark-mode input:-webkit-autofill:focus, body.dark-mode input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #2d2d2d inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* --- 2. The Interactive Highlight Buttons (Cleaned!) --- */
+body.dark-mode #btn-hide-color,
+body.dark-mode #btn-show-color {
+    background-color: #33333300 !important; 
+    color: #999999 !important; 
+    -webkit-text-fill-color: #999999 !important;
+    border: 1px solid #444444 !important;
+    transition: all 0.2s ease !important;
+}
+/* 3. DARK MODE - HOVER STATE (When mouse is resting on the button) */
+body.dark-mode #btn-hide-color:hover:not(.active-toggle):not(:disabled),
+body.dark-mode #btn-show-color:hover:not(.active-toggle):not(:disabled) {
+    background-color: #4a4a4a !important; /* 👈 CHANGE DARK HOVER COLOR HERE */
+    /*border: 1px solid #555555 !important;*/
+}
+body.dark-mode #btn-hide-color.active-toggle,
+body.dark-mode #btn-show-color.active-toggle {
+    background-color: #4a4a4a !important; 
+    color: #dcdbdb !important; 
+    -webkit-text-fill-color: #dcdbdb !important;
+    border: 1px solid #aaaaaade !important;
+    font-weight: bold !important;
+    pointer-events: none !important; 
+}
+/* 👻 DARK MODE: GHOST BUTTON BORDER (Only applied when scrolled!) */
+body.dark-mode .dynamic-sticky-bar.is-scrolled #btn-hide-color,
+body.dark-mode .dynamic-sticky-bar.is-scrolled #btn-show-color {
+    border: 1px solid #555555 !important; /* 👈 Change this to your preferred ghost border color */
+}
+
+/* ☀️ LIGHT MODE - ACTIVE TOGGLE STATE */
+#btn-hide-color.active-toggle,
+#btn-show-color.active-toggle {
+    /* background-color: #e1dfdd !important;  A nice pressed-in grey */
+    color: #107c10 !important; /* Office Green text */
+    border: 1px solid #107c10 !important; /* Green border so they know it's active */
+    font-weight: bold !important;
+    
+    /* 🚀 THE UX FIX: Normal mouse arrow, NO red circle! */
+    cursor: default !important; 
+    
+    /* Ensure the browser doesn't try to disable it */
+    pointer-events: auto !important; 
+}
+
+/* 🚀 PREVENT BROWSER FROM DRAWING FOCUS OUTLINES ON CARDS */
+.error-card:focus,
+.error-card:focus-visible,
+.error-card.is-active:focus {
+    outline: none !important;
+}
+
+/* --- 3. Forms & Containers --- */
+/* 🚀 1. SMART SCAN KEEPS ITS DARK MODE STYLE */
+body.dark-mode .toggle-container {
+    background-color: #464444 !important; 
+    border-color: #444 !important;
+    box-shadow: 0 4px 5px rgba(0,0,0,0.4) !important;
+}
+
+/* 🚀 2. THE ACCORDION WRAPPER BECOMES 100% INVISIBLE */
+#contribution-form,
+body.dark-mode #contribution-form {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+body.dark-mode .api-label { color: #cecbcb !important; }
+body.dark-mode .api-select { background: #333333 !important; color: #cecbcb !important; border-color: #555555 !important; }
+
+/* --- 4. The Changelog Box --- */
+body.dark-mode #changelog-box { background-color: #464444 !important; border-color: #464444 !important; }
+body.dark-mode #changelog-box h3 { color: #ffb900 !important; border-bottom-color: #464444 !important; }
+body.dark-mode #changelog-box, body.dark-mode #changelog-box * { color: #e0e0e0 !important; }
+
+/* --- 5. Custom Scrollbars --- */
+body.dark-mode ::-webkit-scrollbar { width: 14px !important; }
+body.dark-mode ::-webkit-scrollbar-track { background-color: #373737 !important; border-left: 1px solid #333333 !important; }
+body.dark-mode ::-webkit-scrollbar-thumb { background-color: #555555 !important; border-radius: 10px !important; border: 3px solid #373737 !important; }
+body.dark-mode ::-webkit-scrollbar-button { display: none !important; }
+body.dark-mode ::-webkit-scrollbar-corner { background-color: #565555 !important; }
+
+/* --- 6. Generated Cards & Cheat Sheets --- */
+body.dark-mode #error-list div { background: transparent !important; background-color: transparent !important; }
+body.dark-mode #error-list > div { background: #464444 !important; background-color: #464444 !important; border-color: #444444 !important; box-shadow: 0 4px 8px rgba(0,0,0,0.4) !important; }
+body.dark-mode #error-list > div, body.dark-mode #error-list p, body.dark-mode #error-list div { color: #e0e0e0 !important; }
+body.dark-mode #error-list b, body.dark-mode #error-list strong { color: #ffffff !important; }
+body.dark-mode #error-list span[style*="border"] { background-color: #3a3a3a !important; border-color: #555555 !important; color: #b0bec5 !important; }
+body.dark-mode #error-list div, body.dark-mode #error-list p, body.dark-mode #error-list span:not([style*="color"]), 
+body.dark-mode #error-list center, body.dark-mode #error-list small, body.dark-mode #error-list font {
+    color: #d7d6d6 !important; opacity: 1 !important; text-shadow: none !important; 
+}
+body.dark-mode #json-input-container > div { background-color: #252526 !important; border-color: #444 !important; }
+body.dark-mode #json-input-container span[style*="color"], body.dark-mode #json-input-container b { color: inherit !important; opacity: 1 !important; filter: brightness(1.5); }
+body.dark-mode #json-input-container [style*="color"] { filter: brightness(1.2); }
+body.dark-mode #btn-open-manual { color: #d4d4d4 !important; }
+/* ========================================================
+   📚 ACCORDION & PREFERENCES UI
+   ======================================================== */
+.accordion-container { width: 100%; }
+
+/* 🚀 3. RESTORE THE GAPS AND ROUNDED CORNERS */
+.accordion-item {
+    margin-bottom: 15px !important; /* The clean gap is back! */
+    border-radius: 5px !important; /* Every box gets smooth rounded corners */
+    border-width: 1px !important; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+    overflow: hidden;
+}
+
+.accordion-header {
+    width: 100%;
+    color: #333;
+    cursor: pointer;
+    padding: 12px 10px;
+    font-size: 13px;
+    font-weight: bold;
+    border: none;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+    background: transparent;
+    font-family: 'Khmer OS Battambang', sans-serif;
+}
+.accordion-header:hover { background-color:  #e0f0e0; color: #107c10; }
+.accordion-header.active { background-color: #e0f0e0; color: #107c10; border-bottom: 1px solid #eee; }
+.accordion-header .arrow { font-size: 10px; transition: transform 0.3s; }
+.accordion-header.active .arrow { transform: rotate(180deg); }
+.accordion-content { display: none; background-color: transparent; }
+
+.pref-toggle-row label { display: flex; align-items: center; font-size: 13px; color: #333; cursor: pointer; font-family: 'Khmer OS Battambang', sans-serif; }
+.pref-toggle-row input { margin-right: 10px; width: 16px; height: 16px; cursor: pointer; accent-color: #107c10; }
+
+/* 🌑 DARK MODE ACCORDION SUPPORT */
+body.dark-mode .accordion-item { 
+    background-color: #464444 !important; 
+    border-color: #444 !important; /* Matches Smart Scan */
+    
+    /* 🚀 THE FIX: Exact Smart Scan Shadow (0px horizontal, 4px drop, 5px blur) */
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.4) !important; 
+    
+    overflow: hidden;
+}
+body.dark-mode .accordion-header { color: #d4d4d4 !important; }
+body.dark-mode .accordion-header:hover { background-color: #324c32 !important; color: #5cf061aa !important; }
+body.dark-mode .accordion-header.active { background-color: #324c32 !important; color: #5cf061aa !important; border-bottom: 1px solid #565555; }
+body.dark-mode .pref-toggle-row label { color: #e0e0e0 !important; }
+body.dark-mode .pref-toggle-row input { filter: invert(1) hue-rotate(180deg); }
+
+/* 🚀 THE FIX: Prevent accidental blue text highlighting on clickable app elements */
+#btn-open-manual, 
+.accordion-header, 
+.pref-toggle-row label, 
+.toggle-text,
+.app-header {
+    -webkit-user-select: none; /* Safari/Chrome */
+    -ms-user-select: none; /* Microsoft Edge/IE */
+    user-select: none; /* Standard */
+}
+/* 🚀 DARK MODE: Master Close Buttons */
+body.dark-mode .master-close-btn {
+    background-color: #252525 !important; /* Smooth dark gray */
+    color: #e0e0e0 !important; /* Crisp light text */
+    border-color: #252525 !important; /* Matches your accordion borders */
+    transition: background-color 0.2s;
+}
+
+body.dark-mode .master-close-btn:hover {
+    background-color: #565555 !important; /* Slight highlight when hovered */
+}
+/* ========================================================
+   🚀 DYNAMIC STICKY BAR (SCROLL MORPHING - SLIM UI)
+   ======================================================== */
+.scroll-only-btn { display: none !important; }
+
+/* 🎯 WHEN THE USER SCROLLS DOWN */
+.dynamic-sticky-bar.is-scrolled {
+    gap: 3px !important;
+    padding: 1px 3px !important;
+    background-color: #ffffff !important; 
+    border-bottom: 1px solid #edebe9 !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.06) !important;
+    
+    /* 🛑 CRANK THIS UP: Beats the cards, but stays under tooltips! */
+    z-index: 2147483600 !important; 
+    
+    overflow: visible !important; 
+}
+
+/* 1. Reveal the buttons cleanly & crush HTML inline styles! */
+.dynamic-sticky-bar.is-scrolled button,
+.dynamic-sticky-bar.is-scrolled button[style], 
+.dynamic-sticky-bar.is-scrolled button.color-toggle-btn {
+    display: flex !important;
+    flex: 1 1 0px !important; 
+    min-width: 0 !important;  
+    height: 35px !important; 
+    justify-content: center;
+    align-items: center;
+    
+    background: transparent !important; 
+    background-color: transparent !important;
+    
+    /* 🛑 THE FIX: Force a 1px invisible border so it never shifts! */
+    border: 1px solid transparent !important; 
+    
+    box-shadow: none !important;
+    outline: none !important; 
+    border-radius: 4px !important;
+    font-size: 15px !important; 
+    color: #444 !important; 
+    cursor: pointer;
+    transition: all 0.05s ease !important;
+}
+
+/* 2. Brand Green Run Button */
+.dynamic-sticky-bar.is-scrolled #sticky-run-btn { color: #107c10 !important; }
+
+/* 3. Hide Text, Show Icons */
+.dynamic-sticky-bar.is-scrolled .btn-text { display: none !important; }
+.dynamic-sticky-bar.is-scrolled .btn-icon { display: inline !important; font-size: inherit; }
+
+/* 4. Hover Effects */
+.dynamic-sticky-bar.is-scrolled button:hover:not(:disabled) {
+    background-color: #f3f2f1 !important; 
+}
+
+/* 5. Active Clicked State (Beautiful Soft Green) */
+.dynamic-sticky-bar.is-scrolled button.active-toggle {
+    background-color: #e0f0e0 !important; 
+    color: #107c10 !important;
+}
+
+/* 6. Disabled State (Beautiful, soft opacity, NOT ugly gray) */
+.dynamic-sticky-bar.is-scrolled button:disabled {
+    opacity: 1 !important; /* Soft fade */
+    filter: none !important; /* Removes the ugly grayscale */
+    cursor: not-allowed !important;
+    background: transparent !important;
+}
+
+/* 🌑 DARK MODE SUPPORT FOR SLIM UI */
+body.dark-mode .dynamic-sticky-bar.is-scrolled { background-color: #333 !important; border-color: #222 !important; box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;}
+body.dark-mode .dynamic-sticky-bar.is-scrolled button { color: #ccc !important; }
+body.dark-mode .dynamic-sticky-bar.is-scrolled #sticky-run-btn { color: #5cf061aa !important; }
+body.dark-mode .dynamic-sticky-bar.is-scrolled button:hover:not(:disabled) { background-color: #444 !important; }
+body.dark-mode .dynamic-sticky-bar.is-scrolled button.active-toggle { background-color: #324c32 !important; color: #5cf061aa !important; }
+
+/* Note: The old FLOATING SETTINGS POPUP code has been purposely removed here! */
+/* ========================================================
+   🚀 ACCORDION ELEVATION FIX
+   ======================================================== */
+
+/* 1. Ensure the accordion items have a higher priority than the bar below them */
+.accordion-item {
+    position: relative;
+    z-index: 5; /* Higher than the default background but lower than the 'is-scrolled' bar */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 2. Give the headers a clean shadow that sits OVER the highlight-controls */
+.accordion-header {
+    position: relative;
+    z-index: 6;
+}
+
+/* 3. When the sticky bar is NOT scrolled, make sure it stays in the back */
+.dynamic-sticky-bar:not(.is-scrolled) {
+    z-index: 1 !important; 
+    /* box-shadow: none !important; Remove the shadow when it's just sitting in the list */
+}
+/* 3. When the sticky bar is NOT scrolled, make sure it stays in the back */
+body.dark-mode .dynamic-sticky-bar:not(.is-scrolled) {
+    z-index: 1 !important; 
+    /*box-shadow: #33333340 ;  Remove the shadow when it's just sitting in the list */
+    box-shadow: 0 px 5px rgba(0,0,0,0.4) !important
+}
+
+/* 4. Extra Polish: Give the accordion item a slight lift when hovered */
+.accordion-item:hover {
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+/* 🌑 DARK MODE ADJUSTMENT */
+body.dark-mode .accordion-item:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4) !important;
+}
